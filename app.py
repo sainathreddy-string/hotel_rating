@@ -8,20 +8,23 @@ app = Flask(__name__)
 regmodel = pickle.load(open('stack.pkl', 'rb'))
 sclmodel= pickle.load(open('scaler.pkl', 'rb'))
 
-@app.route('/',methods=['GET']) 
-def home():
-    pass
 
-@app.route('/predict_api', methods=['POST'])
-def predict_api():
-    data=request.json['data']
-    print(data)
-    print(np.array(list(data.values())).reshape(1,-1))
-    new_data = sclmodel.transform(np.array(list(data.values())).reshape(1,-1))
-    output = regmodel.predict(new_data)
-    print(output[0])
-    return jsonify(output[0])
+
+@app.route("/", methods=["GET"])
+def home():
+    return render_template("index.html")
+
+@app.route("/submit", methods=["GET"])
+def submit():
+    data = {
+        "score_cleanliness": request.args.get("score_cleanliness", type=float),
+        "score_comfort": request.args.get("score_comfort", type=float),
+        "score_facilities": request.args.get("score_facilities", type=float),
+        "score_location": request.args.get("score_location", type=float),
+        "score_staff": request.args.get("score_staff", type=float),
+        "score_value_for_money": request.args.get("score_value_for_money", type=float),
+    }
+    return jsonify(data)
 
 if __name__ == "__main__":
     app.run(debug=True)
-
