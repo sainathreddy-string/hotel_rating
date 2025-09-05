@@ -8,9 +8,9 @@ app = Flask(__name__)
 regmodel = pickle.load(open('stack.pkl', 'rb'))
 sclmodel= pickle.load(open('scaler.pkl', 'rb'))
 
-@app.route('/')
+@app.route('/',methods=['GET']) 
 def home():
-    return render_template('home.html')
+    pass
 
 @app.route('/predict_api', methods=['POST'])
 def predict_api():
